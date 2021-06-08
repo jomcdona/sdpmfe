@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import Deployments from './Deployments'
@@ -28,10 +28,12 @@ test('sees a button element with the name of "Add Deployment"', () => {
 
 test('enters date 01/02/2021', () => {
   render(<Deployments />)
-  const inputElement = screen.getByLabelText(/Deployment Date/)
 
-  userEvent.type(inputElement, '01/02/2021')
-  // expect(inputElement).toHaveValue('01/02/2021')
-  // const testDate = new RegExp('01/02/2021')
-  expect(screen.getByText(/01\/02\/2021/i)).toBeVisible()
+  const dateString = '01/02/2021'
+  const inputElement = screen.getByLabelText(/^Deployment Date$/)
+
+  userEvent.clear(inputElement)
+  userEvent.type(inputElement, dateString)
+
+  expect(inputElement.value).toBe(dateString)
 })
