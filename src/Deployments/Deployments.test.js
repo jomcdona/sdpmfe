@@ -29,11 +29,25 @@ test('sees a button element with the name of "Add Deployment"', () => {
 test('enters date 01/02/2021', () => {
   render(<Deployments />)
 
-  const dateString = '01/02/2021'
   const inputElement = screen.getByLabelText(/^Deployment Date$/)
+  userEvent.type(inputElement, '2021-10-22')
+  expect(inputElement.value).toBe('2021-10-22')
+})
 
-  userEvent.clear(inputElement)
-  userEvent.type(inputElement, dateString)
+test('enters time 010203AM', () => {
+  render(<Deployments />)
 
-  expect(inputElement.value).toBe(dateString)
+  const inputElement = screen.getByLabelText(/^Deployment Time$/)
+  userEvent.type(inputElement, '01:02')
+  expect(inputElement.value).toBe('01:02')
+})
+
+test('clicking the button makes the date appear in list', () => {
+  render(<Deployments />)
+  const dateElement = screen.getByLabelText(/^Deployment Date$/)
+  userEvent.type(dateElement, '2021-10-22')
+  const timeElement = screen.getByLabelText(/^Deployment Time$/)
+  userEvent.type(timeElement, '0102')
+  userEvent.click(screen.getByRole('button'))
+  expect(screen.getByText('10/22/2021 1:02:00 AM'))
 })
