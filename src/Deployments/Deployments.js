@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { format } from 'date-fns'
+
 function Deployments() {
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
@@ -15,21 +17,7 @@ function Deployments() {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (time.length === 0 || date.length === 0) return
-    let newDate = date.split('-')
-    if (newDate[1] < 10) {
-      newDate[1] = newDate[1][1]
-    }
-    newDate = `${newDate[1]}/${newDate[2]}/${newDate[0]}`
-    let newTime = time.split(':')
-    let ampm
-    if (newTime[0] > 12) {
-      newTime[0] = newTime[0] - 12
-      ampm = ' PM'
-    } else {
-      newTime[0] = `${newTime[0][1]}`
-      ampm = ' AM'
-    }
-    const newDeployment = `${newDate} ${newTime.join(':')}:00${ampm}`
+    const newDeployment = format(new Date(`${date} ${time}`), 'M/d/y h:mm:ss a')
     setList((prevList) => {
       return [...prevList, newDeployment]
     })
