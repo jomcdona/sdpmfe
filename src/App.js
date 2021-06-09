@@ -1,11 +1,16 @@
-import Deployments from './Deployments/Deployments';
-import './App.css';
+import Deployments from './Deployments/Deployments'
+import RecoveryTimes from './RecoveryTimes/RecoveryTimes'
+import './App.css'
+
 function App() {
   return (
     <div className="App">
-      <Deployments />
+      <div className="componentLayout">
+        <Deployments />
+        <RecoveryTimes />
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
