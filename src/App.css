@@ -38,7 +38,7 @@ li {
   padding: 10px;
 }
 
-.container > button {
+button {
   background-color: #5487e0;
   color: white;
   width: 33%;
@@ -102,4 +102,13 @@ tr > td:last-child {
 
 .time-display {
   margin: 15px 0 15px 0;
+}
+
+.durationInput {
+  display: flex;
+  flex-direction: column;
+}
+
+.durationInput > input {
+  padding-bottom: 10px;
 }

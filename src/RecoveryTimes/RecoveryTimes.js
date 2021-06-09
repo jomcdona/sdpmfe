@@ -6,6 +6,7 @@ function RecoveryTimes() {
   const [time, setTime] = useState('')
   const [duration, setDuration] = useState('')
   const [list, setList] = useState([])
+
   const handleDateChange = (e) => {
     const { value } = e.target
     setDate(value)
@@ -17,6 +18,7 @@ function RecoveryTimes() {
 
   const handleDurationChange = (e) => {
     const { value } = e.target
+    if(isNaN(value)) return
     setDuration(value)
   }
 
@@ -51,6 +53,7 @@ function RecoveryTimes() {
           ))}
         </tbody>
       </table>
+      <form onSubmit={handleSubmit}>
       <div className="inputContainer">
         <div className="recoveryTimesStartInputs">
           <label htmlFor="start-date">Start Date</label>
@@ -67,9 +70,12 @@ function RecoveryTimes() {
           <input id="start-time" type="time" value={time} onChange={handleTimeChange}></input>
         </div>
       </div>
+      <div className="recoveryTimesStartInputs">
       <label htmlFor="duration">Duration</label>
       <input id="duration" value={duration} onChange={handleDurationChange}></input>
-      <button onClick={handleSubmit}>Add Recovery Time</button>
+      <button type="submit">Add Recovery Time</button>
+      </div>
+      </form>
     </div>
   )
 }

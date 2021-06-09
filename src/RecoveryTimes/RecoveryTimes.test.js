@@ -77,3 +77,24 @@ test('clicking the button makes the date appear in table', () => {
   expect(screen.getByText('10/22/2021 1:02:00 AM'))
   expect(screen.getByText(/^23$/))
 })
+
+test('pressing enter submits the form', () => {
+  render(<RecoveryTimes />)
+  userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22')
+  userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02')
+  userEvent.type(screen.getByLabelText(/^Duration$/), '23{enter}')
+  expect(screen.getByText('10/22/2021 1:02:00 AM'))
+  expect(screen.getByText(/^23$/))
+})
+
+test('entering incorrect duration is handled', () => {
+  render(<RecoveryTimes />)
+  userEvent.type(screen.getByLabelText(/^Duration$/), 'abc{enter}')
+  expect(screen.getByLabelText(/^Duration$/).value).toBe('')
+})
+
+test('entering negative value in duration is handled', () => {
+  render(<RecoveryTimes />)
+  userEvent.type(screen.getByLabelText(/^Duration$/), '-4{enter}')
+  expect(screen.getByLabelText(/^Duration$/).value).toBe('4')
+})
