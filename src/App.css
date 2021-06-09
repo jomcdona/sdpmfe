@@ -16,6 +16,7 @@ body {
   background-color: #f3f3f3;
   width: 40%;
   padding: 10px;
+  margin-bottom: 20px;
 }
 .container > .title {
   font-size: 25px;
@@ -42,4 +43,7 @@ li {
   width: 33%;
   height: 29px;
   font-weight: 800;
+}
+.time-display {
+  margin: 15px 0 15px 0;
 }
