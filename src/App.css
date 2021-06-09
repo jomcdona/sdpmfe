@@ -103,3 +103,7 @@ tr > td:last-child {
 .time-display {
   margin: 15px 0 15px 0;
 }
+
+.frequency {
+  margin: 16px 0 -0 0;
+}
