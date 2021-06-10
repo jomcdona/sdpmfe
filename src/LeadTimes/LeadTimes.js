@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const LeadTimes = () => {
   const [minutes, setMinutes] = useState('');
-  const [renderMinutes, setRenderMinutes] = useState('');
+  const [renderMinutes, setRenderMinutes] = useState(
+    localStorage.getItem('renderMinutes') || ''
+  );
+
+  useEffect(() => {
+    localStorage.setItem('renderMinutes', renderMinutes);
+  }, [renderMinutes]);
 
   const handleMinuteChange = (e) => {
     const { value } = e.target;

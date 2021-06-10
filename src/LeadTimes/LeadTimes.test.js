@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import LeadTimes from './LeadTimes';
@@ -50,5 +50,18 @@ test('when 1 is entered, and the button is clicked, the words: "1 minute" appear
   const inputElement = screen.getByLabelText(/Change Lead Time \(in minutes\)/);
   userEvent.type(inputElement, '1');
   userEvent.click(buttonElement);
+  expect(screen.getByText(/1 minute/));
+});
+
+test('when 1 is entered and the button is clicked, and the page is refreshed, the lead time number persists', () => {
+  render(<LeadTimes />);
+  const buttonElement = screen.getByRole('button', {
+    name: 'Update Lead Time',
+  });
+  const inputElement = screen.getByLabelText(/Change Lead Time \(in minutes\)/);
+  userEvent.type(inputElement, '1');
+  userEvent.click(buttonElement);
+  cleanup();
+  render(<LeadTimes />);
   expect(screen.getByText(/1 minute/));
 });
