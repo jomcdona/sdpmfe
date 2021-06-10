@@ -18,7 +18,8 @@ function RecoveryTimes() {
 
   const handleDurationChange = (e) => {
     const { value } = e.target
-    if(isNaN(value)) return
+    if (isNaN(value)) return
+    if (value === '0' && duration === '') return
     setDuration(value)
   }
 
@@ -54,27 +55,34 @@ function RecoveryTimes() {
         </tbody>
       </table>
       <form onSubmit={handleSubmit}>
-      <div className="inputContainer">
-        <div className="recoveryTimesStartInputs">
-          <label htmlFor="start-date">Start Date</label>
-          <input
-            id="start-date"
-            name="start-date"
-            type="date"
-            value={date}
-            onChange={handleDateChange}
-          ></input>
+        <div className="inputContainer">
+          <div className="recoveryTimesStartInputs">
+            <label htmlFor="start-date">Start Date</label>
+            <input
+              id="start-date"
+              name="start-date"
+              type="date"
+              value={date}
+              onChange={handleDateChange}
+              required
+            ></input>
+          </div>
+          <div className="recoveryTimesStartInputs">
+            <label htmlFor="start-time">Start Time</label>
+            <input
+              id="start-time"
+              type="time"
+              value={time}
+              onChange={handleTimeChange}
+              required
+            ></input>
+          </div>
         </div>
         <div className="recoveryTimesStartInputs">
-          <label htmlFor="start-time">Start Time</label>
-          <input id="start-time" type="time" value={time} onChange={handleTimeChange}></input>
+          <label htmlFor="duration">Duration</label>
+          <input id="duration" value={duration} onChange={handleDurationChange} required></input>
+          <button type="submit">Add Recovery Time</button>
         </div>
-      </div>
-      <div className="recoveryTimesStartInputs">
-      <label htmlFor="duration">Duration</label>
-      <input id="duration" value={duration} onChange={handleDurationChange}></input>
-      <button type="submit">Add Recovery Time</button>
-      </div>
       </form>
     </div>
   )

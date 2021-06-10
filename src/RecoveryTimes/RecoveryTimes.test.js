@@ -98,3 +98,9 @@ test('entering negative value in duration is handled', () => {
   userEvent.type(screen.getByLabelText(/^Duration$/), '-4{enter}')
   expect(screen.getByLabelText(/^Duration$/).value).toBe('4')
 })
+
+test('allow only positive integer for duration', () => {
+  render(<RecoveryTimes />)
+  userEvent.type(screen.getByLabelText(/^Duration$/), '0{enter}')
+  expect(screen.getByLabelText(/^Duration$/).value).toBe('')
+})
