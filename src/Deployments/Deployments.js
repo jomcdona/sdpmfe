@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { format, getWeek } from 'date-fns';
+import { format } from 'date-fns';
 
-function Deployments() {
+const Deployments = ({ setNumberOfDeployments }) => {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [list, setList] = useState(() => {
@@ -44,6 +44,10 @@ function Deployments() {
     localStorage.setItem('deploymentsList', JSON.stringify(list));
   }, [list]);
 
+  useEffect(() => {
+    setNumberOfDeployments(list.length);
+  }, [list]);
+
   const handleDateChange = (e) => {
     const { value } = e.target;
     setDate(value);
@@ -61,7 +65,8 @@ function Deployments() {
       'M/d/y h:mm:ss a'
     );
     setList((prevList) => {
-      return [...prevList, newDeployment];
+      const newList = [...prevList, newDeployment];
+      return newList;
     });
     let miliTime = new Date(date).getTime();
     setWeekFrequency((prevFrequency) => {
@@ -106,6 +111,6 @@ function Deployments() {
       <button onClick={handleSubmit}>Add Deployment</button>
     </div>
   );
-}
+};
 
 export default Deployments;
