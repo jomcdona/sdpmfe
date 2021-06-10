@@ -1,67 +1,79 @@
-import React, { useEffect, useState } from 'react'
-import { format, getWeek } from 'date-fns'
+import React, { useEffect, useState } from 'react';
+import { format, getWeek } from 'date-fns';
 
 function Deployments() {
-  const [date, setDate] = useState('')
-  const [time, setTime] = useState('')
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [list, setList] = useState(() => {
     return localStorage.getItem('deploymentsList')
       ? JSON.parse(localStorage.getItem('deploymentsList'))
-      : []
-  })
-  const [weekFrequency, setWeekFrequency] = useState([])
-  const [renderWeekFrequency, setRenderWeekFrequency] = useState('')
+      : [];
+  });
+  const [weekFrequency, setWeekFrequency] = useState(
+    JSON.parse(localStorage.getItem('frequencyArray')) || []
+  );
+  const [renderWeekFrequency, setRenderWeekFrequency] = useState(
+    localStorage.getItem('renderFrequency') || ''
+  );
 
   useEffect(() => {
-    const deploys = weekFrequency.length
-    const min = Math.min(...weekFrequency)
-    const max = Math.max(...weekFrequency)
-    const delta = max - min
-    const days = delta / 86400000
-    let weeks
+    const deploys = weekFrequency.length;
+    const min = Math.min(...weekFrequency);
+    const max = Math.max(...weekFrequency);
+    const delta = max - min;
+    const days = delta / 86400000;
+    let weeks;
     if (days < 7) {
-      weeks = 1
+      weeks = 1;
     } else {
-      weeks = days / 7
+      weeks = days / 7;
     }
-    const a = deploys / weeks
-    let tempFreq = (Math.ceil(a * 10) / 10).toFixed(1)
+    const a = deploys / weeks;
+    let tempFreq = (Math.ceil(a * 10) / 10).toFixed(1);
     if (tempFreq === '0.0') {
-      return
+      return;
     } else if (tempFreq % 1 === 0) {
-      tempFreq = Math.round(tempFreq)
+      tempFreq = Math.round(tempFreq);
     }
-    const renderFreq = ` ${tempFreq}/week`
-    setRenderWeekFrequency(renderFreq)
-  }, [weekFrequency])
+    const renderFreq = ` ${tempFreq}/week`;
+    localStorage.setItem('renderFrequency', renderFreq);
+    setRenderWeekFrequency(renderFreq);
+  }, [weekFrequency]);
 
   useEffect(() => {
-    localStorage.setItem('deploymentsList', JSON.stringify(list))
-  }, [list])
+    localStorage.setItem('deploymentsList', JSON.stringify(list));
+  }, [list]);
 
   const handleDateChange = (e) => {
-    const { value } = e.target
-    setDate(value)
-  }
+    const { value } = e.target;
+    setDate(value);
+  };
   const handleTimeChange = (e) => {
-    const { value } = e.target
-    setTime(value)
-  }
+    const { value } = e.target;
+    setTime(value);
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    if (time.length === 0 || date.length === 0) return
-    const newDeployment = format(new Date(`${date} ${time}`), 'M/d/y h:mm:ss a')
+    e.preventDefault();
+    if (time.length === 0 || date.length === 0) return;
+    const newDeployment = format(
+      new Date(`${date} ${time}`),
+      'M/d/y h:mm:ss a'
+    );
     setList((prevList) => {
-      return [...prevList, newDeployment]
-    })
-    let miliTime = new Date(date).getTime()
+      return [...prevList, newDeployment];
+    });
+    let miliTime = new Date(date).getTime();
     setWeekFrequency((prevFrequency) => {
-      return [...prevFrequency, miliTime]
-    })
-    setTime('')
-    setDate('')
-  }
+      localStorage.setItem(
+        'frequencyArray',
+        JSON.stringify([...prevFrequency, miliTime])
+      );
+      return [...prevFrequency, miliTime];
+    });
+    setTime('');
+    setDate('');
+  };
 
   return (
     <div className="container">
@@ -72,7 +84,7 @@ function Deployments() {
       </div>
       <ol>
         {list.map((item, index) => {
-          return <li key={index}>{item}</li>
+          return <li key={index}>{item}</li>;
         })}
       </ol>
       <label htmlFor="deployment-date">Deployment Date</label>
@@ -93,7 +105,7 @@ function Deployments() {
       ></input>
       <button onClick={handleSubmit}>Add Deployment</button>
     </div>
-  )
+  );
 }
 
-export default Deployments
+export default Deployments;
