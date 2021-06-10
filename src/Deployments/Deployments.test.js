@@ -89,37 +89,6 @@ test('see 1.5/week after adding 2 deployments on the same day, 1 deployment 14 d
   expect(screen.getByText(/1.5\/week/));
 });
 
-test('when a date and time is entered and the button is clicked, and the page is refreshed, the frequency persists', () => {
-  localStorage.clear();
-  render(<Deployments />);
-  const dateElement = screen.getByLabelText(/^Deployment Date$/);
-  userEvent.type(dateElement, '2021-10-22');
-  const timeElement = screen.getByLabelText(/^Deployment Time$/);
-  userEvent.type(timeElement, '0102');
-  userEvent.click(screen.getByRole('button'));
-  cleanup();
-  render(<Deployments />);
-  expect(screen.getByText('10/22/2021 1:02:00 AM'));
-});
-
-test('see 1.5/week after adding 2 deployments on the same day and 1 deployment 14 days later', () => {
-  localStorage.clear();
-  render(<Deployments />);
-  const dateElement = screen.getByLabelText(/^Deployment Date$/);
-  const timeElement = screen.getByLabelText(/^Deployment Time$/);
-  for (let i = 0; i < 2; i++) {
-    userEvent.type(dateElement, '2021-06-10');
-    userEvent.type(timeElement, `010${i}`);
-    userEvent.click(screen.getByRole('button'));
-  }
-  for (let i = 0; i < 1; i++) {
-    userEvent.type(dateElement, '2021-06-24');
-    userEvent.type(timeElement, `010${i}`);
-    userEvent.click(screen.getByRole('button'));
-  }
-  expect(screen.getByText(/1.5\/week/));
-});
-
 test('see 0.1/week after adding 2 deployments one year apart', () => {
   localStorage.clear();
   render(<Deployments />);
@@ -136,4 +105,17 @@ test('see 0.1/week after adding 2 deployments one year apart', () => {
     userEvent.click(screen.getByRole('button'));
   }
   expect(screen.getByText(/0.1\/week/));
+});
+
+test('when a date and time is entered and the button is clicked, and the page is refreshed, the frequency persists', () => {
+  localStorage.clear();
+  render(<Deployments />);
+  const dateElement = screen.getByLabelText(/^Deployment Date$/);
+  userEvent.type(dateElement, '2021-10-22');
+  const timeElement = screen.getByLabelText(/^Deployment Time$/);
+  userEvent.type(timeElement, '0102');
+  userEvent.click(screen.getByRole('button'));
+  cleanup();
+  render(<Deployments />);
+  expect(screen.getByText('10/22/2021 1:02:00 AM'));
 });
