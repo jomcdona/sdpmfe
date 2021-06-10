@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import RecoveryTimes from './RecoveryTimes'
@@ -76,6 +76,8 @@ test('clicking the button makes the date appear in table', () => {
 
   expect(screen.getByText('10/22/2021 1:02:00 AM'))
   expect(screen.getByText(/^23$/))
+
+  localStorage.clear()
 })
 
 test('pressing enter submits the form', () => {
@@ -85,6 +87,8 @@ test('pressing enter submits the form', () => {
   userEvent.type(screen.getByLabelText(/^Duration$/), '23{enter}')
   expect(screen.getByText('10/22/2021 1:02:00 AM'))
   expect(screen.getByText(/^23$/))
+
+  localStorage.clear()
 })
 
 test('entering incorrect duration is handled', () => {
@@ -103,4 +107,17 @@ test('allow only positive integer for duration', () => {
   render(<RecoveryTimes />)
   userEvent.type(screen.getByLabelText(/^Duration$/), '0{enter}')
   expect(screen.getByLabelText(/^Duration$/).value).toBe('')
+})
+
+test('refreshing page keeps table contents', () => {
+  render(<RecoveryTimes />)
+  userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22')
+  userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02')
+  userEvent.type(screen.getByLabelText(/^Duration$/), '23{enter}')
+  cleanup()
+  render(<RecoveryTimes />)
+  expect(screen.getByText('10/22/2021 1:02:00 AM'))
+  expect(screen.getByText(/^23$/))
+
+  localStorage.clear()
 })

@@ -1,11 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 
 function RecoveryTimes() {
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
   const [duration, setDuration] = useState('')
-  const [list, setList] = useState([])
+  const [list, setList] = useState(() => {
+    return localStorage.getItem('recoveryTimesList')
+      ? JSON.parse(localStorage.getItem('recoveryTimesList'))
+      : []
+  })
+
+  useEffect(() => {
+    localStorage.setItem('recoveryTimesList', JSON.stringify(list))
+  }, [list])
 
   const handleDateChange = (e) => {
     const { value } = e.target

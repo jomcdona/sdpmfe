@@ -1,7 +1,9 @@
-import Deployments from './Deployments/Deployments';
-import LeadTimes from './LeadTimes/LeadTimes';
-import RecoveryTimes from './RecoveryTimes/RecoveryTimes';
-import './App.css';
+import React, { useState } from 'react'
+import Deployments from './Deployments/Deployments'
+import LeadTimes from './LeadTimes/LeadTimes'
+import RecoveryTimes from './RecoveryTimes/RecoveryTimes'
+import ChangeFailRate from './ChangeFailRate/ChangeFailRate'
+import './App.css'
 
 function App() {
   return (
@@ -14,10 +16,11 @@ function App() {
         </div>
         <div className="componentLayout">
           <RecoveryTimes />
+          <ChangeFailRate />
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

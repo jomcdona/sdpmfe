@@ -23,7 +23,7 @@ body {
 }
 .app_container {
   display: flex;
-  display: row;
+  flex-direction: row;
 }
 
 .container {
@@ -131,4 +131,20 @@ tr > td:last-child {
 
 .durationInput > input {
   padding-bottom: 10px;
+}
+@media only screen and (max-width: 720px) {
+  .app_container {
+    flex-direction: column;
+  }
+}
+.fail_number {
+  font-weight: 800;
+}
+
+.fail_rate {
+  margin-top: 30px;
+  margin-left: 10px;
+}
+.change_fail_container {
+  min-height: 140px;
 }
