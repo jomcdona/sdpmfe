@@ -5,27 +5,31 @@ function Deployments() {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [list, setList] = useState([]);
-  const [weekFrequency, setWeekFrequency] = useState({});
+  const [weekFrequency, setWeekFrequency] = useState([]);
   const [renderWeekFrequency, setRenderWeekFrequency] = useState('');
 
   useEffect(() => {
-    const divisor = Object.keys(weekFrequency).length;
-    if (divisor < 1) return;
-    let sum = 0;
-    for (let key in weekFrequency) {
-      sum += weekFrequency[key];
-    }
-    let average = sum / divisor;
-    average = average.toFixed(1);
-    let tempRenderWeekFrequency;
-    if (average % 1 !== 0) {
-      tempRenderWeekFrequency = ` ${average}/week`;
+    const deploys = weekFrequency.length;
+    const min = Math.min(...weekFrequency);
+    const max = Math.max(...weekFrequency);
+    const delta = max - min;
+    const days = delta / 86400000;
+    let weeks;
+    if (days < 7) {
+      weeks = 1;
     } else {
-      average = Math.round(average);
-      tempRenderWeekFrequency = ` ${average}/week`;
+      weeks = days / 7;
     }
-    setRenderWeekFrequency(tempRenderWeekFrequency);
-  }, [list]);
+    const a = deploys / weeks;
+    let tempFreq = (Math.ceil(a * 10) / 10).toFixed(1);
+    if (tempFreq === '0.0') {
+      return;
+    } else if (tempFreq % 1 === 0) {
+      tempFreq = Math.round(tempFreq);
+    }
+    const renderFreq = ` ${tempFreq}/week`;
+    setRenderWeekFrequency(renderFreq);
+  }, [weekFrequency]);
 
   const handleDateChange = (e) => {
     const { value } = e.target;
@@ -39,13 +43,6 @@ function Deployments() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (time.length === 0 || date.length === 0) return;
-    const week = getWeek(new Date(date));
-    let tempWeekFrequency = weekFrequency;
-    if (tempWeekFrequency[week]) {
-      tempWeekFrequency[week] += 1;
-    } else {
-      tempWeekFrequency[week] = 1;
-    }
     const newDeployment = format(
       new Date(`${date} ${time}`),
       'M/d/y h:mm:ss a'
@@ -53,7 +50,10 @@ function Deployments() {
     setList((prevList) => {
       return [...prevList, newDeployment];
     });
-    setWeekFrequency(tempWeekFrequency);
+    let miliTime = new Date(date).getTime();
+    setWeekFrequency((prevFrequency) => {
+      return [...prevFrequency, miliTime];
+    });
     setTime('');
     setDate('');
   };
