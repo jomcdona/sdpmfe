@@ -131,6 +131,17 @@ test('MTTR element is on the page', () => {
   expect(titleElement).toBeInTheDocument();
 });
 
+test('expect MTTR: to read "1 minute" after placing one recovery time with the duration of 1 minute', () => {
+  localStorage.clear();
+  render(<App />);
+  for (let i = 0; i < 1; i++) {
+    userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22');
+    userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
+    userEvent.type(screen.getByLabelText(/^Duration$/), '1{enter}');
+  }
+  expect(screen.getByText(/^1 minute$/));
+});
+
 test('expect MTTR: to read "1 minute" after placing three recovery times on the same day with the duration of 1 minute', () => {
   localStorage.clear();
   render(<App />);
@@ -165,5 +176,22 @@ test('expect MTTR: to read "7.5 minutes" after placing three recovery times with
   userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-25');
   userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
   userEvent.type(screen.getByLabelText(/^Duration$/), '5{enter}');
+  expect(screen.getByText(/^7.5 minutes$/));
+});
+
+test('expect MTTR: to read "7.5 minutes" after placing three recovery times with the duration of 10 minutes on one day, and one recovery time with the duration of 5 mintutes on a different day, and refreshing the page', () => {
+  localStorage.clear();
+  render(<App />);
+  for (let i = 0; i < 3; i++) {
+    userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22');
+    userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
+    userEvent.type(screen.getByLabelText(/^Duration$/), '10{enter}');
+  }
+  userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-25');
+  userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
+  userEvent.type(screen.getByLabelText(/^Duration$/), '5{enter}');
+  expect(screen.getByText(/^7.5 minutes$/));
+  cleanup();
+  render(<App />);
   expect(screen.getByText(/^7.5 minutes$/));
 });
