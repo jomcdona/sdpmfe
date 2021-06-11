@@ -48,6 +48,10 @@ const Deployments = ({ setNumberOfDeployments }) => {
     setNumberOfDeployments(list.length);
   }, [list]);
 
+  useEffect(() => {
+    localStorage.setItem('frequencyArray', JSON.stringify(weekFrequency));
+  }, [weekFrequency]);
+
   const handleDateChange = (e) => {
     const { value } = e.target;
     setDate(value);
@@ -65,15 +69,10 @@ const Deployments = ({ setNumberOfDeployments }) => {
       'M/d/y h:mm:ss a'
     );
     setList((prevList) => {
-      const newList = [...prevList, newDeployment];
-      return newList;
+      return [...prevList, newDeployment];
     });
     let miliTime = new Date(date).getTime();
     setWeekFrequency((prevFrequency) => {
-      localStorage.setItem(
-        'frequencyArray',
-        JSON.stringify([...prevFrequency, miliTime])
-      );
       return [...prevFrequency, miliTime];
     });
     setTime('');
