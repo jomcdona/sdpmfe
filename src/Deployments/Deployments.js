@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import { calculateFrequency } from './utils';
 
 const Deployments = ({ setNumberOfDeployments }) => {
   const [date, setDate] = useState('');
@@ -17,24 +18,8 @@ const Deployments = ({ setNumberOfDeployments }) => {
   );
 
   useEffect(() => {
-    const deploys = weekFrequency.length;
-    const min = Math.min(...weekFrequency);
-    const max = Math.max(...weekFrequency);
-    const delta = max - min;
-    const days = delta / 86400000;
-    let weeks;
-    if (days < 7) {
-      weeks = 1;
-    } else {
-      weeks = days / 7;
-    }
-    const a = deploys / weeks;
-    let tempFreq = (Math.ceil(a * 10) / 10).toFixed(1);
-    if (tempFreq === '0.0') {
-      return;
-    } else if (tempFreq % 1 === 0) {
-      tempFreq = Math.round(tempFreq);
-    }
+    const tempFreq = calculateFrequency(weekFrequency);
+    if (!tempFreq) return;
     const renderFreq = ` ${tempFreq}/week`;
     localStorage.setItem('renderFrequency', renderFreq);
     setRenderWeekFrequency(renderFreq);
