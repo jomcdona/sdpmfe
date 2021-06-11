@@ -124,3 +124,46 @@ test('refreshing page keeps table contents', () => {
 
   localStorage.clear();
 });
+
+test('MTTR element is on the page', () => {
+  render(<App />);
+  const titleElement = screen.getByText(/^MTTR:$/);
+  expect(titleElement).toBeInTheDocument();
+});
+
+test('expect MTTR: to read "1 minute" after placing three recovery times on the same day with the duration of 1 minute', () => {
+  localStorage.clear();
+  render(<App />);
+  for (let i = 0; i < 3; i++) {
+    userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22');
+    userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
+    userEvent.type(screen.getByLabelText(/^Duration$/), '1{enter}');
+  }
+  expect(screen.getByText(/^1 minute$/));
+});
+
+test('expect MTTR: to read "1.5 minutes" after placing one recovery time with the duration of 1 minute and one recovery time with the duration of 2 mintutes on the same day', () => {
+  localStorage.clear();
+  render(<App />);
+  userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22');
+  userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
+  userEvent.type(screen.getByLabelText(/^Duration$/), '1{enter}');
+  userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22');
+  userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
+  userEvent.type(screen.getByLabelText(/^Duration$/), '2{enter}');
+  expect(screen.getByText(/^1.5 minutes$/));
+});
+
+test('expect MTTR: to read "7.5 minutes" after placing three recovery times with the duration of 10 minutes on one day, and one recovery time with the duration of 5 mintutes on a different day', () => {
+  localStorage.clear();
+  render(<App />);
+  for (let i = 0; i < 3; i++) {
+    userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22');
+    userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
+    userEvent.type(screen.getByLabelText(/^Duration$/), '10{enter}');
+  }
+  userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-25');
+  userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
+  userEvent.type(screen.getByLabelText(/^Duration$/), '5{enter}');
+  expect(screen.getByText(/^7.5 minutes$/));
+});
