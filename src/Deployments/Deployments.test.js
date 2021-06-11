@@ -87,6 +87,23 @@ test('see 1.5/week after adding 2 deployments on the same day, 1 deployment 14 d
   }
   expect(screen.getByText(/1.5\/week/));
 });
+test('see 1.5/week after adding 2 deployments on the same day, 1 deployment 8 days later', () => {
+  localStorage.clear();
+  render(<App />);
+  const dateElement = screen.getByLabelText(/^Deployment Date$/);
+  const timeElement = screen.getByLabelText(/^Deployment Time$/);
+  for (let i = 0; i < 2; i++) {
+    userEvent.type(dateElement, '2021-06-10');
+    userEvent.type(timeElement, `010${i}`);
+    userEvent.click(screen.getByRole('button', { name: 'Add Deployment' }));
+  }
+  for (let i = 0; i < 1; i++) {
+    userEvent.type(dateElement, '2021-06-18');
+    userEvent.type(timeElement, `010${i}`);
+    userEvent.click(screen.getByRole('button', { name: 'Add Deployment' }));
+  }
+  expect(screen.getByText(/1.5\/week/));
+});
 
 test('see 0.1/week after adding 2 deployments one year apart', () => {
   localStorage.clear();

@@ -12,7 +12,7 @@ const calculateFrequency = (weekFrequency) => {
   } else {
     weeks = days / 7;
   }
-  const a = deploys / weeks;
+  const a = deploys / Math.ceil(weeks);
   let tempFreq = round(a, 1);
   if (tempFreq === '0.0' || tempFreq === 0) {
     tempFreq = '< 0.1';
