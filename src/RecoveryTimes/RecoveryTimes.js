@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import { calculateMTTR } from './utils';
+import { round } from '../ChangeFailRate/utis';
 
 function RecoveryTimes({ setNumberOfRecoveries }) {
   const [date, setDate] = useState('');
@@ -10,10 +12,39 @@ function RecoveryTimes({ setNumberOfRecoveries }) {
       ? JSON.parse(localStorage.getItem('recoveryTimesList'))
       : [];
   });
+  const [meanHash, setMeanHash] = useState(
+    JSON.parse(localStorage.getItem('meanHash')) || {}
+  );
+  const [renderMTTR, setRenderMTTR] = useState(
+    localStorage.getItem('renderMTTR') || ''
+  );
 
   useEffect(() => {
     localStorage.setItem('recoveryTimesList', JSON.stringify(list));
   }, [list]);
+
+  useEffect(() => {
+    if (list.length === 0) {
+      setRenderMTTR('');
+      return;
+    }
+    const rawMTTR = calculateMTTR(meanHash);
+    let mttr;
+    if (rawMTTR === 1) {
+      mttr = ` 1 minute`;
+    } else {
+      mttr = ` ${round(rawMTTR, 1)} minutes`;
+    }
+    setRenderMTTR(mttr);
+  }, [meanHash]);
+
+  useEffect(() => {
+    localStorage.setItem('meanHash', JSON.stringify(meanHash));
+  }, [meanHash]);
+
+  useEffect(() => {
+    localStorage.setItem('renderMTTR', renderMTTR);
+  }, [renderMTTR]);
 
   useEffect(() => {
     setNumberOfRecoveries(list.length);
@@ -42,6 +73,15 @@ function RecoveryTimes({ setNumberOfRecoveries }) {
       format(new Date(`${date} ${time}`), 'M/d/y h:mm:ss a'),
       duration,
     ];
+    let newHash = meanHash;
+    if (meanHash[date]) {
+      newHash[date].push(duration);
+    } else {
+      newHash[date] = [duration];
+    }
+    setMeanHash((prevHash) => {
+      return { ...prevHash, ...newHash };
+    });
     setList((prevList) => {
       return [...prevList, newRecoveryTime];
     });
@@ -53,6 +93,10 @@ function RecoveryTimes({ setNumberOfRecoveries }) {
   return (
     <div className="container">
       <div className="title">Recovery Times</div>
+      <div className="mttr">
+        MTTR:
+        <span className="render_mttr">{renderMTTR}</span>
+      </div>
       <table>
         <thead>
           <tr>

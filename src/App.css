@@ -148,3 +148,10 @@ tr > td:last-child {
 .change_fail_container {
   min-height: 140px;
 }
+
+.mttr {
+  margin: 16px 0 5px 3px;
+}
+.render_mttr {
+  font-weight: 800;
+}
