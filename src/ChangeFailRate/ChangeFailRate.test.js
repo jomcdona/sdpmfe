@@ -22,7 +22,7 @@ test('shows correct result as whole number', () => {
   userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22');
   userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
   userEvent.type(screen.getByLabelText(/^Duration$/), '23{enter}');
-  expect(screen.getByText('1%'));
+  expect(screen.getByText('100%'));
 });
 
 test('shows correct result with decimal', () => {
@@ -38,5 +38,5 @@ test('shows correct result with decimal', () => {
   userEvent.type(screen.getByLabelText(/^Start Date$/), '2021-10-22');
   userEvent.type(screen.getByLabelText(/^Start Time$/), '01:02');
   userEvent.type(screen.getByLabelText(/^Duration$/), '23{enter}');
-  expect(screen.getByText('0.3%'));
+  expect(screen.getByText('33.3%'));
 });

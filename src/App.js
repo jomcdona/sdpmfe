@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     if (numberOfDeployments !== 0 && numberOfRecoveries !== 0) {
-      const rawFailRate = numberOfRecoveries / numberOfDeployments;
+      const rawFailRate = (numberOfRecoveries / numberOfDeployments) * 100;
       const roundedFailRate = round(rawFailRate, 1);
       setRenderFailRate(roundedFailRate);
     }
