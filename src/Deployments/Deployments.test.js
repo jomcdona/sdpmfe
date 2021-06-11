@@ -81,7 +81,7 @@ test('see 1.5/week after adding 2 deployments on the same day, 1 deployment 14 d
     userEvent.click(screen.getByRole('button', { name: 'Add Deployment' }));
   }
   for (let i = 0; i < 1; i++) {
-    userEvent.type(dateElement, '2021-06-24');
+    userEvent.type(dateElement, '2021-06-17');
     userEvent.type(timeElement, `010${i}`);
     userEvent.click(screen.getByRole('button', { name: 'Add Deployment' }));
   }

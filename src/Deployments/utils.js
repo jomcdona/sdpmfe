@@ -1,18 +1,17 @@
 import { round } from '../ChangeFailRate/utis';
+import { getWeek, getWeekYear } from 'date-fns';
 
 const calculateFrequency = (weekFrequency) => {
   const deploys = weekFrequency.length;
   const min = Math.min(...weekFrequency);
   const max = Math.max(...weekFrequency);
-  const delta = max - min;
-  const days = delta / 86400000;
-  let weeks;
-  if (days < 7) {
-    weeks = 1;
-  } else {
-    weeks = days / 7;
+  let delta = 0;
+  if (getWeekYear(min) !== getWeekYear(max)) {
+    delta = getWeekYear(max) - getWeekYear(min);
+    delta = delta * 52;
   }
-  const a = deploys / Math.ceil(weeks);
+  const deltaWeek = Math.abs(getWeek(max) + delta - getWeek(min)) + 1;
+  const a = deploys / deltaWeek;
   let tempFreq = round(a, 1);
   if (tempFreq === '0.0' || tempFreq === 0) {
     tempFreq = '< 0.1';
