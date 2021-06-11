@@ -23,7 +23,7 @@ const Deployments = ({ setNumberOfDeployments }) => {
     const renderFreq = ` ${tempFreq}/week`;
     localStorage.setItem('renderFrequency', renderFreq);
     setRenderWeekFrequency(renderFreq);
-  }, [weekFrequency]);
+  }, [weekFrequency, list]);
 
   useEffect(() => {
     localStorage.setItem('deploymentsList', JSON.stringify(list));
@@ -31,7 +31,7 @@ const Deployments = ({ setNumberOfDeployments }) => {
 
   useEffect(() => {
     setNumberOfDeployments(list.length);
-  }, [list]);
+  }, [list, setNumberOfDeployments]);
 
   useEffect(() => {
     localStorage.setItem('frequencyArray', JSON.stringify(weekFrequency));

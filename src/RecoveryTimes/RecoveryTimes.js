@@ -36,7 +36,7 @@ function RecoveryTimes({ setNumberOfRecoveries }) {
       mttr = ` ${round(rawMTTR, 1)} minutes`;
     }
     setRenderMTTR(mttr);
-  }, [meanHash]);
+  }, [meanHash, list]);
 
   useEffect(() => {
     localStorage.setItem('meanHash', JSON.stringify(meanHash));
@@ -48,7 +48,7 @@ function RecoveryTimes({ setNumberOfRecoveries }) {
 
   useEffect(() => {
     setNumberOfRecoveries(list.length);
-  }, [list]);
+  }, [list, setNumberOfRecoveries]);
 
   const handleDateChange = (e) => {
     const { value } = e.target;
