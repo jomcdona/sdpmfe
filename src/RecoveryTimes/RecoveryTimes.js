@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { calculateMTTR } from './utils';
+import { calculateMTTR, createNewMeanHash } from './utils';
 import { round } from '../ChangeFailRate/utis';
 
 function RecoveryTimes({ setNumberOfRecoveries }) {
@@ -73,12 +73,7 @@ function RecoveryTimes({ setNumberOfRecoveries }) {
       format(new Date(`${date} ${time}`), 'M/d/y h:mm:ss a'),
       duration,
     ];
-    let newHash = meanHash;
-    if (meanHash[date]) {
-      newHash[date].push(duration);
-    } else {
-      newHash[date] = [duration];
-    }
+    let newHash = createNewMeanHash(meanHash, date, duration);
     setMeanHash((prevHash) => {
       return { ...prevHash, ...newHash };
     });
