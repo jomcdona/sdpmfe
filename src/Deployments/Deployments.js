@@ -19,7 +19,7 @@ const Deployments = ({ setNumberOfDeployments }) => {
 
   useEffect(() => {
     const tempFreq = calculateFrequency(weekFrequency);
-    if (!tempFreq) return;
+    if (!tempFreq || list.length === 0) return;
     const renderFreq = ` ${tempFreq}/week`;
     localStorage.setItem('renderFrequency', renderFreq);
     setRenderWeekFrequency(renderFreq);

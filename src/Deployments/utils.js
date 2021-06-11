@@ -1,3 +1,5 @@
+import { round } from '../ChangeFailRate/utis';
+
 const calculateFrequency = (weekFrequency) => {
   const deploys = weekFrequency.length;
   const min = Math.min(...weekFrequency);
@@ -11,9 +13,9 @@ const calculateFrequency = (weekFrequency) => {
     weeks = days / 7;
   }
   const a = deploys / weeks;
-  let tempFreq = (Math.ceil(a * 10) / 10).toFixed(1);
-  if (tempFreq === '0.0') {
-    return;
+  let tempFreq = round(a, 1);
+  if (tempFreq === '0.0' || tempFreq === 0) {
+    tempFreq = '< 0.1';
   } else if (tempFreq % 1 === 0) {
     tempFreq = Math.round(tempFreq);
   }

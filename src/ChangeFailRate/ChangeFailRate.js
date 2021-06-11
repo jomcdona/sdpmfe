@@ -1,11 +1,6 @@
 import React from 'react';
 function ChangeFailRate({ renderFailRate }) {
-  let failRate;
-  if (renderFailRate) {
-    failRate = renderFailRate;
-  } else {
-    failRate = 0;
-  }
+  let failRate = renderFailRate || 0;
   return (
     <div className="container change_fail_container">
       <div className="title">Change Fail Rate</div>
