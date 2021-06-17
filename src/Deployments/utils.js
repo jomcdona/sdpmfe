@@ -40,4 +40,21 @@ const clearDeployments = () =>
   console.log("clearing persisted deployments")
   fetch("http://localhost:8080/cleardeployments")
 }
-export { calculateFrequency, addDeployment, clearDeployments }
+
+const getDeployments = async() =>
+{
+  console.log("retrieving persisted deployments")
+  let deploydata = await fetch("http://localhost:8080/getdeployments")
+  let deployjson = await deploydata.json()
+  console.log(deployjson)
+  return deployjson;
+  /*.then(responsedata  => responsedata.json())
+  .then(responsedata => {
+     console.log(responsedata)
+     return(responsedata)
+  })
+  .catch((error) => {
+    console.log(error)
+  })*/
+}
+export { calculateFrequency, addDeployment, clearDeployments, getDeployments }

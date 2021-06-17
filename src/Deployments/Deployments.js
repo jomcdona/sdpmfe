@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { addDeployment, calculateFrequency, clearDeployments } from './utils';
+import { addDeployment, calculateFrequency, clearDeployments, getDeployments } from './utils';
 
 const Deployments = ({ setNumberOfDeployments }) => {
   const [date, setDate] = useState('');
@@ -46,6 +46,14 @@ const Deployments = ({ setNumberOfDeployments }) => {
     setTime(value);
   };
 
+  const getDeployLocal = async () => {
+    let jsonData = await getDeployments();
+    console.log("here: " + JSON.stringify(jsonData));
+    localStorage.setItem('deploymentsList', JSON.stringify(jsonData))
+    setList(jsonData);
+
+   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (time.length === 0 || date.length === 0) return;
@@ -63,6 +71,9 @@ const Deployments = ({ setNumberOfDeployments }) => {
     );
 
     addDeployment(persistDeployment);
+    getDeployLocal();
+    //console.log("this is what i got back from function call " + djson);
+    //setList(JSON.parse(localStorage.getItem('deploymentsList')))
     let miliTime = new Date(date).getTime();
     setWeekFrequency((prevFrequency) => {
       return [...prevFrequency, miliTime];
@@ -79,8 +90,10 @@ const Deployments = ({ setNumberOfDeployments }) => {
     setRenderWeekFrequency('');
     clearDeployments();
   }
+  
 
   return (
+
     <div className="container">
       <div className="title">Deployments</div>
       <div className="frequency">
@@ -88,8 +101,8 @@ const Deployments = ({ setNumberOfDeployments }) => {
         <b>{renderWeekFrequency}</b>
       </div>
       <ol>
-        {list.map((item, index) => {
-          return <li key={index}>{item}</li>;
+        {list.map((item) => {
+          return <li key={item.id}>{item.Date} {item.Time}</li>;
         })}
       </ol>
       <label htmlFor="deployment-date">Deployment Date</label>
