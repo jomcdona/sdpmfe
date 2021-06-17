@@ -21,4 +21,23 @@ const calculateFrequency = (weekFrequency) => {
   return tempFreq;
 };
 
-export { calculateFrequency };
+const addDeployment = (deployment) =>
+{
+   console.log("calling addDeployments with " + deployment)
+   fetch("http://localhost:8080/adddeployment", {
+     method: "post",
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'text/plain'
+     },
+
+     body: deployment
+   })
+}
+
+const clearDeployments = () =>
+{
+  console.log("clearing persisted deployments")
+  fetch("http://localhost:8080/cleardeployments")
+}
+export { calculateFrequency, addDeployment, clearDeployments }

@@ -22,4 +22,24 @@ const average = (arr) => {
   return arr.reduce((a, b) => parseInt(a) + parseInt(b)) / arr.length;
 };
 
-export { calculateMTTR, createNewMeanHash };
+const addRecovery = (recovery) => {
+  const recpayload = "{\"recoverydate\": \"" + recovery[0] + "\", \"recoveryduration\": " + recovery[1] + " }"
+  console.log("calling addrecovery with " + recpayload)
+   fetch("http://localhost:8080/addrecovery", {
+     method: "post",
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json'
+     },
+
+     body: recpayload
+   })
+}
+
+const clearRecoveries = () => {
+  console.log("clearing recoveries from server");
+  fetch("http://localhost:8080/clearrecoveries");
+}
+
+export { calculateMTTR, createNewMeanHash, addRecovery, clearRecoveries};
+

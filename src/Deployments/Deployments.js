@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { calculateFrequency } from './utils';
+import { addDeployment, calculateFrequency, clearDeployments } from './utils';
 
 const Deployments = ({ setNumberOfDeployments }) => {
   const [date, setDate] = useState('');
@@ -56,6 +56,13 @@ const Deployments = ({ setNumberOfDeployments }) => {
     setList((prevList) => {
       return [...prevList, newDeployment];
     });
+
+    const persistDeployment = format(
+      new Date(`${date} ${time}`),
+      'yyyy-MM-dd hh:mm:ss a'
+    );
+
+    addDeployment(persistDeployment);
     let miliTime = new Date(date).getTime();
     setWeekFrequency((prevFrequency) => {
       return [...prevFrequency, miliTime];
@@ -63,6 +70,15 @@ const Deployments = ({ setNumberOfDeployments }) => {
     setTime('');
     setDate('');
   };
+
+  const handleClear = (e) => {
+    localStorage.clear();
+    localStorage.setItem('deploymentsList', '');
+    localStorage.setItem('renderFrequency', '');
+    setList([]);
+    setRenderWeekFrequency('');
+    clearDeployments();
+  }
 
   return (
     <div className="container">
@@ -92,7 +108,8 @@ const Deployments = ({ setNumberOfDeployments }) => {
         value={time}
         onChange={handleTimeChange}
       ></input>
-      <button onClick={handleSubmit}>Add Deployment</button>
+      <div><button onClick={handleSubmit}>Add Deployment</button></div>
+      <div><button onClick={handleClear}>Clear Deployments</button></div>
     </div>
   );
 };

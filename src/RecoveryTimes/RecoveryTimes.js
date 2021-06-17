@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { calculateMTTR, createNewMeanHash } from './utils';
+import { addRecovery, calculateMTTR, createNewMeanHash, clearRecoveries } from './utils';
 import { round } from '../ChangeFailRate/utis';
 
 function RecoveryTimes({ setNumberOfRecoveries }) {
@@ -66,6 +66,13 @@ function RecoveryTimes({ setNumberOfRecoveries }) {
     setDuration(value);
   };
 
+  const clearRecoveryTimes = (e) => {
+    localStorage.clear();
+    setRenderMTTR('');
+    setList([]);
+    clearRecoveries();
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (time.length === 0 || date.length === 0 || duration.length === 0) return;
@@ -73,6 +80,14 @@ function RecoveryTimes({ setNumberOfRecoveries }) {
       format(new Date(`${date} ${time}`), 'M/d/y h:mm:ss a'),
       duration,
     ];
+
+    const persistRecoveryTime = [
+      format(new Date(`${date} ${time}`), 'yyyy-MM-dd hh:mm:ss a'),
+      duration,
+    ];
+
+    addRecovery(persistRecoveryTime);
+
     let newHash = createNewMeanHash(meanHash, date, duration);
     setMeanHash((prevHash) => {
       return { ...prevHash, ...newHash };
@@ -143,6 +158,7 @@ function RecoveryTimes({ setNumberOfRecoveries }) {
           <button type="submit">Add Recovery Time</button>
         </div>
       </form>
+      <button onClick={clearRecoveryTimes}>Clear Recovery Times</button>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { addLeadTime } from './utils';
 
 const LeadTimes = () => {
   const [minutes, setMinutes] = useState('');
@@ -13,13 +14,14 @@ const LeadTimes = () => {
   const handleMinuteChange = (e) => {
     const { value } = e.target;
     if (isNaN(value)) return;
-    if (minutes == 0 && value == 0) return;
+    if (minutes === 0 && value === 0) return;
     setMinutes(value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (minutes.length === 0) return;
+    addLeadTime(minutes);
     let msg = '';
     if (minutes === '1') {
       msg = minutes + ' minute';
